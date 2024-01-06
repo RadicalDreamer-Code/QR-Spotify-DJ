@@ -1,3 +1,4 @@
+import json
 import os
 
 import spotipy
@@ -27,8 +28,16 @@ sp = spotipy.Spotify(
     client_credentials_manager=sp_oath
 )
 
-# predefined genres
-GENRE_ROCK, GENRE_POP, GENRE_HOUSE, GENRE_DIVERS = range(4)
+# predefined genres / key from json
+GENRE_ROCK = "Rock"
+GENRE_POP = "Pop"
+GENRE_ELECTRONIC = "Electronic"
+GENRE_HIP_HOP = "Hip Hop"
+GENRE_METAL = "Metal"
+GENRE_COUNTRY = "Country"
+GENRE_DIVERS = "DIVERS"
+
+SELECTED_GENRES = [GENRE_POP, GENRE_ROCK, GENRE_ELECTRONIC, GENRE_HIP_HOP]
 
 genre_playlists = []
 
@@ -42,6 +51,18 @@ pprint(res)
 #     'spotify:track:6gdLoMygLsgktydTQ71b15'
 # ])
 
+# write genre json
+file_data_path = "genre_data.json"
+genre_json = None
+
+with open(file_data_path, 'r', encoding='utf-8') as file:
+    content = file.read()
+    genre_json = json.loads(content)
+
+# sample data
+sample_track_uri = "spotify:track:2d1MywHy6FwKdzxFuSJnwl"
+sample_artist_uri = "spotify:artist:53XhwfbYqKCa1cC15pYq2q"
+
 @app.route("/add-track/<playlist_id>/<track_item>")
 def add_track_to_playlist(playlist_id: str, track_item: str):
     # check if playlist_id is available
@@ -51,12 +72,36 @@ def add_track_to_playlist(playlist_id: str, track_item: str):
     sp.playlist_add_items('playlist_id', ['list_of_items'])
     pass
 
-@app.route("/add-track/<track_item>")
-def add_track_to_playlist_automated(track_item: str):
-    # get genres by main artist
+@app.route("/add-track-auto/<track_uri>/<artist_uri>")
+def add_track_to_playlist_automated(track_uri: str, artist_uri: str):
+    # artist: get genres by main artist
+    artist = sp.artist(artist_uri)
+    genres = artist.get("genres")
+
+    genre_counter = {}
+    for selected_genre in SELECTED_GENRES:
+        for genre in genres:
+            if genre in genre_json[selected_genre]:
+                genre_counter[selected_genre] = genre_counter.get(selected_genre, 0) + 1
+
+    return genres
+
+@app.route("/add-track-auto")
+def add_track_to_playlist_automated_test():
+    # artist: get genres by main artist
+    artist = sp.artist(sample_artist_uri)
+    genres = artist.get("genres")
+
+    genre_counter = {}
+    for selected_genre in SELECTED_GENRES:
+        for genre in genres:
+            if genre in genre_json[selected_genre]:
+                genre_counter[selected_genre] = genre_counter.get(selected_genre, 0) + 1
     
+    # decide on a genre and add it to the spotify playlist
     
-    pass
+
+    return genre_counter
 
 @app.route("/change-playlist/<playlist_id>")
 def change_playlist(playlist_id: str):
