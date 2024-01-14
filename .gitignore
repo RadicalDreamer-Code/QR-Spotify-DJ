@@ -1,7 +1,13 @@
 .env
+.cache
+db.sqlite3
 JS/
+Client/
 Server/.cache
 Server/__pycache__
+DjangoServer/DjangoServer/__pycache__
+DjangoServer/accounts/__pycache__
+DjangoServer/QRSpotify/__pycache__
 chosic-genres
 
 helpers.py
