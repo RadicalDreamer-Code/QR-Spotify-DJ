@@ -6,6 +6,7 @@ from spotipy.oauth2 import SpotifyOAuth
 from pprint import pprint
 from time import sleep
 from flask import Flask
+from flask_limiter import Limiter
 from dotenv import load_dotenv
 
 app = Flask(__name__)
@@ -32,12 +33,13 @@ sp = spotipy.Spotify(
 GENRE_ROCK = "Rock"
 GENRE_POP = "Pop"
 GENRE_ELECTRONIC = "Electronic"
+GENRE_90S_ELECTRONIC = "90s Electronic"
 GENRE_HIP_HOP = "Hip Hop"
 GENRE_METAL = "Metal"
 GENRE_COUNTRY = "Country"
 GENRE_DIVERS = "DIVERS"
 
-SELECTED_GENRES = [GENRE_POP, GENRE_ROCK, GENRE_ELECTRONIC, GENRE_HIP_HOP]
+SELECTED_GENRES = [GENRE_POP, GENRE_ROCK, GENRE_ELECTRONIC, GENRE_90S_ELECTRONIC, GENRE_HIP_HOP]
 
 genre_playlists = []
 
@@ -72,6 +74,7 @@ def add_track_to_playlist(playlist_id: str, track_item: str):
     sp.playlist_add_items('playlist_id', ['list_of_items'])
     pass
 
+# TODO remember user who added the track
 @app.route("/add-track-auto/<track_uri>/<artist_uri>")
 def add_track_to_playlist_automated(track_uri: str, artist_uri: str):
     # artist: get genres by main artist
@@ -105,18 +108,24 @@ def add_track_to_playlist_automated_test():
 
 @app.route("/change-playlist/<playlist_id>")
 def change_playlist(playlist_id: str):
-    global GENRE_HOUSE, GENRE_ROCK, GENRE_POP
+    global GENRE_ROCK, GENRE_POP
     # change to playlist and start it
     if int(playlist_id) == GENRE_ROCK:
-        playlist_uri = ""
+        playlist_uri = "spotify:playlist:6QdbX63tCiiFIYN7og5nms"
 
-    elif int(playlist_id) == GENRE_HOUSE:
-        playlist_uri = ""
+    elif int(playlist_id) == GENRE_ELECTRONIC:
+        playlist_uri = "spotify:playlist:7Hevv8ihYGJhDRSfsnaTss"
+
+    elif int(playlist_id) == GENRE_90S_ELECTRONIC:
+        playlist_uri = "spotify:playlist:6QdbX63tCiiFIYN7og5nms"
 
     elif int(playlist_id) == GENRE_POP:
         playlist_uri = ""
     else:
         pass
+
+    sp.start_playback(context_uri=playlist_uri)
+    return "changed playlist"
 
 @app.route("/search-track/<track_name>")
 def search_track(track_name: str):
@@ -154,6 +163,11 @@ def search_artist(artist_uri: str):
     artist = sp.artist(artist_uri)
     return artist
 
+@app.route("/get-playlists")
+def get_playlists():
+    playlists = sp.current_user_playlists()
+    return playlists
+
 @app.route("/")
 def home():
-    pass
+    return "Hello, World!"
