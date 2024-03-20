@@ -1,7 +1,7 @@
 import re
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import login
-from .serializers import ChangePasswordSerializer, QuickRegisterSerializer, SearchHistorySerializer, UsernameSerializer
+from .serializers import ChangePasswordSerializer, HashSerializer, QuickRegisterSerializer, UsernameSerializer
 from django.contrib.auth.models import User
 from rest_framework import status
 from knox.views import LoginView as KnoxLoginView
@@ -189,3 +189,19 @@ class UsernameCheckAPI(generics.GenericAPIView):
         except:
             print("True")
             return Response({"valid": True})
+
+class AuthenticateHashAPI(generics.GenericAPIView):
+    authentication_classes = []
+    permission_classes = []
+    serializer_class = HashSerializer
+
+    def post(self, request):
+        # username = request.data.get("username")
+        hash = request.data.get("hash")
+        try:
+            user = User.objects.get(hash=hash)
+            print("True")
+            return Response({"valid": True})
+        except:
+            print("False")
+            return Response({"valid": False})

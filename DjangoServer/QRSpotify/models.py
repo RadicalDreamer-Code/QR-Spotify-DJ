@@ -5,7 +5,7 @@ from django.db import models
 class Playlist(models.Model):
     name = models.CharField(max_length=200)
     uri = models.CharField(max_length=200)
-    tracks = models.ManyToOneRel("Track", on_delete=models.CASCADE)
+    tracks = models.ManyToOneRel("Track", on_delete=models.CASCADE, to="Track", field_name="playlist")
 
     def __str__(self):
         return self.name

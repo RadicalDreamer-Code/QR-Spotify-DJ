@@ -12,6 +12,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { Navigate } from 'react-router-dom';
 
 function Copyright(props: any) {
   return (
@@ -25,14 +26,23 @@ function Copyright(props: any) {
 const defaultTheme = createTheme();
 
 export default function SignIn() {
+  const [success, setSuccess] = React.useState(false);
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
+    console.log({ 
+      username: data.get('name'),
+      // password: data.get('password'),
     });
+
+    // TODO: call api to check if username exists
+    setSuccess(true);
   };
+
+  if (success) {
+    return <Navigate to="/spotify" replace />;
+  }
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -50,7 +60,7 @@ export default function SignIn() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Anmelden
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
@@ -64,10 +74,10 @@ export default function SignIn() {
               autoFocus
             />
 
-            <FormControlLabel
+            {/* <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
-            />
+            /> */}
             <Button
               type="submit"
               fullWidth

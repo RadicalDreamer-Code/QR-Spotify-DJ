@@ -17,8 +17,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from QRSpotify import urls as qr_spotify_urls
+from accounts import urls as accounts_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('qr-spotify/', include(qr_spotify_urls)),
+    path('accounts/', include(accounts_urls)),
 ]

@@ -13,3 +13,5 @@ chosic-genres
 helpers.py
 spotify-genres.html
 genre_data.json
+
+*.cpython-311.pyc

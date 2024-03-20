@@ -19,3 +19,17 @@ class UserData(models.Model):
     def create_with_ingredients(cls, user):
         data = cls.objects.create(user=user)
         return data
+    
+class HashUser(models.Model):
+    # user = models.ForeignKey(User, on_delete=models.CASCADE)
+    username = models.TextField(default="", blank=True)
+    hash = models.TextField(default="", blank=True)
+    created_at = models.DateTimeField(default=now)
+    
+    def __str__(self) -> str:
+        return self.username
+    
+    @classmethod
+    def create(cls, username, hash):
+        data = cls.objects.create(username=username, hash=hash)
+        return data

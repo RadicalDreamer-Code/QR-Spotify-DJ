@@ -43,9 +43,9 @@ SELECTED_GENRES = [
 file_data_path = "genre_data.json"
 genre_json = None
 
-with open(file_data_path, 'r', encoding='utf-8') as file:
-    content = file.read()
-    genre_json = json.loads(content)
+# with open(file_data_path, 'r', encoding='utf-8') as file:
+#     content = file.read()
+#     genre_json = json.loads(content)
 
 
 # spotipy

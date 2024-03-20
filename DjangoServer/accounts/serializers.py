@@ -63,3 +63,7 @@ class UserDataSerializer(serializers.ModelSerializer):
 
 class UsernameSerializer(serializers.Serializer):
     username = serializers.CharField()
+
+class HashSerializer(serializers.Serializer):
+    # username = serializers.CharField()
+    hash = serializers.CharField()

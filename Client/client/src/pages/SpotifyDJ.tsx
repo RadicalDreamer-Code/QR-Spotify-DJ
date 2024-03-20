@@ -18,6 +18,7 @@ import { Timeline } from '../components/SpotifyDJ/Timeline';
 import { searchSong } from '../api/QRDJ';
 import { SpotifySong } from "../interfaces";
 import { SongEntry } from '../components/SpotifyDJ/SongEntry';
+import { Navigate } from 'react-router-dom';
 
 function Copyright(props: any) {
   return (
@@ -30,9 +31,18 @@ function Copyright(props: any) {
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
-export default function SignIn() {
-  // song results state
+interface SpotifyDJProps {
+  user: any;
+}
+
+export default function SpotifyDJ({ user }: SpotifyDJProps) {
   const [songs, setSongs] = React.useState<SpotifySong[]>([]);
+  
+  if (!user) {
+    return <Navigate to="/unauthorized" replace />;
+  }
+
+  // song results state
 
   // search for song
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
