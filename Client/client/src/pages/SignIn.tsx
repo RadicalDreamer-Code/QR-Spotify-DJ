@@ -13,6 +13,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Navigate } from 'react-router-dom';
+import { setUsername } from '../api/account';
 
 function Copyright(props: any) {
   return (
@@ -25,7 +26,11 @@ function Copyright(props: any) {
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
-export default function SignIn() {
+interface SignInProps {
+  validHash: string;
+}
+
+export default function SignIn({ validHash }: SignInProps) {
   const [success, setSuccess] = React.useState(false);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -36,8 +41,16 @@ export default function SignIn() {
       // password: data.get('password'),
     });
 
-    // TODO: call api to check if username exists
-    setSuccess(true);
+    setUsername(validHash, data.get('name') as string).then((res) => {
+      console.log(res)
+      if (res.valid) {
+        window.location.replace("/spotify");
+      }
+
+      // setSuccess(true);
+    }).catch((err) => { 
+      console.error(err);
+    });
   };
 
   if (success) {

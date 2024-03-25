@@ -32,3 +32,13 @@ export const addSong = async (song: SpotifySong): Promise<boolean> => {
     return false;
   }
 }
+
+export const removeSong = async (song: SpotifySong): Promise<boolean> => {
+  try {
+    const res = await axios.post(`${API_URL}/remove_track`, song);
+    return true;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+}

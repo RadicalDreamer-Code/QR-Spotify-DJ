@@ -6,6 +6,7 @@ from .views import (
     ChangePasswordView,
     SearchUserAPI,
     RetrieveUserData,
+    SetUsernameForHashAPI,
     UsernameCheckAPI,
     AuthenticateHashAPI
 )
@@ -19,4 +20,5 @@ urlpatterns = [
     # TODO: reset password
     path('username-check/', UsernameCheckAPI.as_view()),
     path('hash-check/', AuthenticateHashAPI.as_view()),
+    path('set-username/', SetUsernameForHashAPI.as_view()),
 ]

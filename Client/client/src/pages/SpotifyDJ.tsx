@@ -32,13 +32,14 @@ function Copyright(props: any) {
 const defaultTheme = createTheme();
 
 interface SpotifyDJProps {
-  user: any;
+  validHash: string;
 }
 
-export default function SpotifyDJ({ user }: SpotifyDJProps) {
+export default function SpotifyDJ({ validHash }: SpotifyDJProps) {
+  console.log(validHash)
   const [songs, setSongs] = React.useState<SpotifySong[]>([]);
   
-  if (!user) {
+  if (!validHash) {
     return <Navigate to="/unauthorized" replace />;
   }
 

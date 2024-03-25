@@ -8,8 +8,8 @@ import AuthComponent from './components/SpotifyDJ/AuthComponent';
 import Unauthorized from './pages/Unauthorized';
 
 function App() {
-  const user = ""
-  const Navigate = ""
+  console.log("App")
+  const hash = localStorage.getItem('validHash') as string;
 
   return (
     // Auth -> SpotifyDJ or if no username is set then SignIn
@@ -18,8 +18,8 @@ function App() {
       <Routes>
         <Route path="/:hashedKey" element={<AuthComponent />} />
 
-        <Route path="/spotify" element={<SpotifyDJ user={user} />} />
-        <Route path="/signin" element={<SignIn />} />
+        <Route path="/spotify" element={<SpotifyDJ validHash={hash} />} />
+        <Route path="/signin" element={<SignIn validHash={hash} />} />
         <Route path="/unauthorized" element={<Unauthorized />} />
       </Routes>
     </Router>

@@ -16,7 +16,7 @@ from rest_framework.response import Response
 from knox.models import AuthToken
 from rest_framework.views import APIView
 
-from accounts.models import UserData
+from accounts.models import HashUser, UserData
 from .serializers import UserDataSerializer, UserSerializer, RegisterSerializer
 
 
@@ -198,10 +198,34 @@ class AuthenticateHashAPI(generics.GenericAPIView):
     def post(self, request):
         # username = request.data.get("username")
         hash = request.data.get("hash")
+        print(hash)
         try:
-            user = User.objects.get(hash=hash)
-            print("True")
-            return Response({"valid": True})
+            hash_user = HashUser.objects.get(hash=hash)
+
+            return Response({
+                "username": hash_user.username,
+                "valid": True
+            })
         except:
-            print("False")
+            print("Hashuser not found")
+            return Response({"valid": False})
+        
+class SetUsernameForHashAPI(generics.GenericAPIView):
+    authentication_classes = []
+    permission_classes = []
+    serializer_class = HashSerializer
+
+    def post(self, request):
+        username = request.data.get("username")
+        hash = request.data.get("hash")
+        try:
+            hash_user = HashUser.objects.get(hash=hash)
+            hash_user.username = username
+            hash_user.save()
+            return Response({
+                "username": hash_user.username,
+                "valid": True
+            })
+        except:
+            print("Hashuser not found")
             return Response({"valid": False})

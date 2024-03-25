@@ -27,7 +27,7 @@ class HashUser(models.Model):
     created_at = models.DateTimeField(default=now)
     
     def __str__(self) -> str:
-        return self.username
+        return self.username + self.hash
     
     @classmethod
     def create(cls, username, hash):
