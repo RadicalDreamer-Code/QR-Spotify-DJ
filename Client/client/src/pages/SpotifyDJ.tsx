@@ -139,9 +139,11 @@ export default function SpotifyDJ({ validHash }: SpotifyDJProps) {
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="sm">
         <CssBaseline />
+        <div className="spotify-dj-header">
+          <img src="./spotify/header_complete@2x-8.png"></img>
+        </div>
         <Box
           sx={{
-            marginTop: 8,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
@@ -151,9 +153,6 @@ export default function SpotifyDJ({ validHash }: SpotifyDJProps) {
           {/* <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
             <LockOutlinedIcon />
           </Avatar> */}
-          <Typography component="h1" variant="h5">
-            Search for a song
-          </Typography>
           <Box
             className="search-bar"
             component="form"
@@ -186,27 +185,28 @@ export default function SpotifyDJ({ validHash }: SpotifyDJProps) {
             }
           </Box>
         </Box>
-        <List
-          className="song-list"
-          sx={{ width: "100%", maxWidth: 580 }}
-        >
-          {songs?.map((song) => (
-            <SongEntry
-              key={song.uri}
-              song={song}
-              selected={checkIfSelected(song)}
-              handleSelect={handleSelect}
-              handleRemove={handleRemove}
-            />
-          ))}
-        </List>
+        <div className="song-list-container">
+          <List
+            className="song-list"
+            sx={{ width: "100%", maxWidth: 580 }}
+          >
+            {songs?.map((song) => (
+              <SongEntry
+                key={song.uri}
+                song={song}
+                selected={checkIfSelected(song)}
+                handleSelect={handleSelect}
+                handleRemove={handleRemove}
+              />
+            ))}
+          </List>
+          <img className="song-list-img" src="./spotify/results_horizontal@2x-8.png"></img>
+        </div>
         <div className="spotify-dj-footer">
             <div>
+              <img src="./spotify/swirlheader@2x-8.png"></img>
             </div>
-            <div>
-            </div>
-            <div>
-            </div>
+            <p>Design BY FAB</p>
         </div>
       </Container>
       <Snackbar

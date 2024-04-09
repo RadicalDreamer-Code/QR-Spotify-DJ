@@ -119,7 +119,7 @@ export const SongEntry = (props: SongEntryProps) => {
               Play
             </Button>
             <Button
-              onClick={() => goToSpotify(props.song.uri)}
+              onClick={() => addSong(props.song)}
               variant="contained"
               color="primary"
             >
@@ -130,7 +130,7 @@ export const SongEntry = (props: SongEntryProps) => {
 
         </div>
     </div>
-    <div className="song-entry-half-background">
+    <div className={"song-entry-half-background " + selectClassNameBasedOnYear(props.song.release_date)}>
       
     </div>
     </ div>
