@@ -17,6 +17,11 @@ from rest_framework import authentication, permissions
 from django.contrib.auth.models import User
 from django.conf import settings
 
+from accounts.models import HashUser
+from .models import Track
+
+MAX_SONG_COUNT = 25
+
 # predefined genres / key from json
 GENRE_ROCK = "Rock"
 GENRE_POP = "Pop"
@@ -156,6 +161,39 @@ def add_track_to_playlist_automated_test():
 
     return genre_counter
 
+class GetSelectedTracks(APIView):
+    """
+    View to get the selected tracks.
+
+    * Requires token authentication.
+    * Only admin users are able to access this view.
+    """
+    authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = []
+
+    def post(self, request, format=None):
+        """
+        Get the selected tracks by user.
+        """
+
+        data = request.data
+        hashuser = data.get("hashUser")
+
+        # check if hashuser exists in db
+        try:
+            user = HashUser.objects.get(hash=hashuser)
+        except HashUser.DoesNotExist:
+            response = {
+                "status": "error",
+                "message": "hashuser not found"
+            }
+            return Response(response)
+
+        # get tracks
+        tracks = Track.objects.filter(added_by_hash_user=user).values()
+
+        return Response(tracks)
+
 
 class AddTrackToPlaylistAutomated(APIView):
     """
@@ -170,51 +208,111 @@ class AddTrackToPlaylistAutomated(APIView):
 
     def post(self, request, format=None):
         """
-        Add a track to a playlist.
+        Add a track.
         """
         # get request body
-        print(request.data)
+        data = request.data
+        hashuser = data.get("hashUser")
 
-        # get user from request
-        user = request.user
+        # check if hashuser exists in db
+        try:
+            user = HashUser.objects.get(hash=hashuser)
+        except HashUser.DoesNotExist:
+            response = {
+                "status": "error",
+                "message": "hashuser not found"
+            }
+            return Response(response)
+        
+        # check how many tracks user has already added
+        tracks = Track.objects.filter(added_by_hash_user=user)
+        if len(tracks) >= MAX_SONG_COUNT:
+            response = {
+                "status": "error",
+                "message": "max song count reached"
+            }
+            return Response(response)
+        
+        # check if track is arleady in db by the user
+        track = Track.objects.filter(
+            uri=data.get("uri"),
+            added_by_hash_user=user
+        )
 
-        # get username
-        username = user.username
+        if track:
+            response = {
+                "status": "error",
+                "message": "track already added"
+            }
+            return Response(response, status=400)
+        
+        entry_type = data.get("type")
+        
+        Track.objects.create(
+            name=data.get("songName"),
+            uri=data.get("uri"),
+            duration_ms=data.get("durationMs"),
+            release_date=data.get("releaseDate"),
+            added_by_hash_user=user
+        )
 
-        track_uri = request.data.get("uri")
-        artist_uri = request.data.get("artist_uri")
-        print(track_uri)
-        # print(artist_uri)
+        response = {
+            "status": "success",
+            "message": "track added",
+            "current_song_count": len(tracks) + 1
+        }
 
-        # artist: get genres by main artist
-        # genre_counter = add_track_to_playlist_automated_test()
-        release_date = sp.track(track_uri).get("album").get("release_date")
-        print(release_date)
-
-        # depending on release_date add to playlist
-        if "1980" < release_date <= "1990":
-            # add to pop playlist
-            
-            pass
-
-        elif "1990" < release_date <= "2000":
-            # add to pop playlist
-            
-            pass
-
-        elif "2000" < release_date <= "2010":
-            pass
-
-        elif "2010" < release_date <= "2020":
-            pass
-
-        else:
-            pass
-
-        # decide on a genre and add it to the spotify playlist
-        # return new playlist
-        return "genre_counter"
+        return Response(response)
     
+class RemoveTrackFromPlaylist(APIView):
+    """
+    View to remove a track from a playlist.
+
+    * Requires token authentication.
+    * Only admin users are able to access this view.
+    """
+    authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = []
+
+    def post(self, request, format=None):
+        """
+        Remove a track.
+        """
+        # get request body
+        data = request.data
+        hashuser = data.get("hashUser")
+
+        # check if hashuser exists in db
+        try:
+            user = HashUser.objects.get(hash=hashuser)
+        except HashUser.DoesNotExist:
+            response = {
+                "status": "error",
+                "message": "hashuser not found"
+            }
+            return Response(response)
+        
+        # check if track is arleady in db by the user
+        track = Track.objects.filter(uri=data.get("uri"), added_by_hash_user=user)
+        print(track)
+        if not track:
+            response = {
+                "status": "error",
+                "message": "track not found"
+            }
+            return Response(response, status=400)
+        
+        track.delete()
+
+        tracks = Track.objects.filter(added_by_hash_user=user)
+        response = {
+            "status": "success",
+            "message": "track removed",
+            "current_song_count": len(tracks)
+        }
+
+        return Response(response)
+
 def search_track(track_name: str):
     result = sp.search(track_name)
 
@@ -230,18 +328,19 @@ def search_track(track_name: str):
     for item in items:
         # TODO: concat all artists
         album = item.get("album")
+        # artists = item.get("artists")
+
         release_date = album.get("release_date")
-        main_artist = item.get("artists")[0]
-        artist_name = main_artist.get("name")
-        artist_uri = main_artist.get("uri")
+        #print(item.get("artists"))
 
         entry = {
             "user": "",
             "uri": item.get("uri", "None"),
-            "song": item.get("name", "undefined"),
-            "artist_name": artist_name or "",
-            "artist_uri": artist_uri,
+            "name": item.get("name", "undefined"),
+            "album": item.get("album", "undefined"), # "album": item.get("album", "undefined"),
+            "artists": item.get("artists", "undefined"),
             "release_date": release_date or "",
+            "duration_ms": item.get("duration_ms", -1)
         }
 
         found_tracks.append(entry)
@@ -265,3 +364,28 @@ class SearchTrack(APIView):
         # get track name from request
         print(track_name)
         return Response(search_track(track_name))
+    
+# TODO:
+class GetDurationForEachDecade(APIView):
+    authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = []
+
+    def get(self, request):
+        tracks = Track.objects.get()
+
+        # remove non unique track uri
+        filtered_tracks = []
+        for track in tracks:
+            if track.uri not in filtered_tracks:
+                filtered_tracks.append(track.uri)
+
+        # get duration for each decade
+        duration_dict = {}
+        for track in filtered_tracks:
+            release_date = track.release_date
+            duration = track.duration_ms
+
+            decade = release_date[:3] + "0"
+            duration_dict[decade] = duration_dict.get(decade, 0) + duration
+
+        return Response(duration_dict)

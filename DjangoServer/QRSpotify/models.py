@@ -1,4 +1,5 @@
 from django.db import models
+from accounts.models import HashUser
 
 # Create your models here.
 
@@ -13,9 +14,11 @@ class Playlist(models.Model):
 class Track(models.Model):
     name = models.CharField(max_length=200)
     uri = models.CharField(max_length=200)
-    artist_name = models.CharField(max_length=200)
-    artist_uri = models.CharField(max_length=200)
-    playlist = models.ForeignKey(Playlist, on_delete=models.CASCADE)
+    added_by_hash_user = models.ForeignKey(HashUser, on_delete=models.CASCADE)
+    duration_ms = models.IntegerField(default=-1)
+    release_date = models.CharField(max_length=200, default="")
+    trash = models.BooleanField(default=False)
+    chill = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name

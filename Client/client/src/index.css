@@ -1,3 +1,9 @@
+@font-face {
+  font-family: Geminis; /* Give your font a name */
+  src: url('./fonts/BD_Geminis.otf') format('opentype');
+  /* Add more src lines for other formats if necessary */
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -5,9 +11,369 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background: rgb(5, 4, 4) !important;
+  color: white;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.frame {
+  height: 100%;
+  width: 100px;
+  position: relative;
+  /* round edges */
+  border-radius: 5px;
+  margin-right: 10px;
+}
+
+/* second img */
+.frame img:nth-child(2) {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+.song-entry-selected {
+  /* transparent background */
+  background-color: rgba(0, 0, 0, 0.3); 
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  display: flex; /* Add flexbox to center content */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+}
+
+
+.fade-80s {
+  height: 100%;
+  width: 100%;
+  position:absolute;
+  background: -webkit-linear-gradient(left, 
+              rgba(0,0,0,0) 0%, 
+              rgba(0,0,0,0) 20%,
+              rgba(121, 105, 105, 0.2) 80%,
+              rgba(53, 45, 45, 0.9) 100%
+  );
+}
+
+
+.fade-90s {
+  height: 100%;
+  width: 100%;
+  position:absolute;
+  background: -webkit-linear-gradient(left, 
+              rgba(0,0,0,0) 0%, 
+              rgba(0,0,0,0) 20%,
+              rgba(173, 0, 241, 0.2) 80%,
+              rgba(157, 0, 255, 0.9) 100%
+  );
+}
+
+
+.fade-2000s {
+  height: 100%;
+  width: 100%;
+  position:absolute;
+  background: -webkit-linear-gradient(left, 
+              rgba(0,0,0,0) 0%, 
+              rgba(0,0,0,0) 20%,
+              rgba(0, 76, 241, 0.2) 80%,
+              rgba(0, 110, 255, 0.9) 100%
+  );
+}
+
+
+.fade-2010s {
+  height: 100%;
+  width: 100%;
+  position:absolute;
+  background: -webkit-linear-gradient(left, 
+              rgba(0,0,0,0) 0%, 
+              rgba(0,0,0,0) 20%,
+              rgba(241, 0, 0, 0.2) 80%,
+              rgb(255, 0, 0, 0.9) 100%
+  );
+}
+
+/* .song-entry {
+  height: 60px;
+  display: flex;
+  border-bottom: 1px solid #ccc;
+  padding: 0 !important;
+  width: 100%;
+  display: inline-block;
+  padding: 10px 20px;
+  color: rgb(0, 0, 0);
+  background-size: 200% 100%;
+  background-position: right bottom;
+  transition: background-position 0.5s, color 0.5s;
+  cursor: pointer;
+} */
+
+.search-bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px 0;
+  width: 100%;
+}
+
+.search-song-input {
+  width: 100%;
+  height: 40px;
+  border-radius: 0px;
+  border-width: 1px;
+  border-style: solid;
+  color: white;
+  background-color: black;
+  font-size: 20px;
+  font-family: 'Geminis';
+}
+
+.search-button {
+  min-width: 120px;
+  background-color: #ffffff;
+  color: rgb(0, 0, 0);
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  padding: 5px 10px;
+  height: 40px;
+
+  font-family: 'Geminis';
+  font-size: 20px;
+}
+
+
+.song-entry-container {
+  position: relative;
+  min-height: 100px; 
+  max-height: 400px; 
+
+}
+
+.song-entry-half-background {
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  height: 40%;
+  z-index: -1;
+  background: linear-gradient(to right, #42b1dd, #ff00ea);
+  left: 0;
+  margin: 4px 0;
+
+  border-width: 1px;
+  border-style: solid;
+  border-color: #ffffff;
+}
+
+
+.song-entry {
+  color: white;
+  display: flex;
+  flex-direction: row;
+  
+  border-width: 1px;
+  border-style: solid;
+  border-color: #ffffff;
+  padding: 5px 20px 5px 25px;
+  width: 100%;
+  margin: 10px 0;
+}
+
+.song-entry .song-entry-text {
+  width: 100%;
+}
+
+.song-entry .song-entry-text p { 
+  font-family: 'Geminis';
+  font-size: 20px;
+  margin: 0;
+}
+
+.song-entry .song-entry-text button {
+  font-family: 'Geminis';
+  font-size: 20px;
+}
+
+.song-entry .image-display img {
+  width: 140px;
+  height: 120px;
+  padding: 5px 15px;
+  object-fit: cover;
+}
+
+.song-entry .song-entry-text-upper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.song-entry .song-entry-text-lower {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+  font-size: 10px;
+  width: 100%;
+}
+
+.song-entry .song-entry-text-lower .song-entry-text-lower-left {
+  float: left;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.song-entry .song-entry-text-lower .song-entry-text-lower-right {
+  float: right;
+}
+
+.song-entry .song-entry-text-lower .song-entry-text-lower-right button {
+  background-color: #ffffff;
+  color: rgb(0, 0, 0);
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  padding: 5px 10px;
+  margin: 3px;
+  max-height: 30px;
+}
+
+/* background: linear-gradient(to left, transparent 50%, red 50%); */
+
+.anim-80s {
+  background-image: linear-gradient(to left, transparent 50%, rgb(255, 0, 183) 50%);
+}
+
+.anim-90s {
+  background-image: linear-gradient(to left, transparent 50%, rgb(0, 153, 241) 50%);
+}
+
+.anim-2000s {
+  background-image: linear-gradient(to left, transparent 50%, rgb(116, 127, 150) 50%);
+}
+
+.anim-2010s {
+  background-image: linear-gradient(to left, transparent 50%, rgb(255, 13, 0) 50%);
+}
+
+.anim-2020s {
+  background-image: linear-gradient(to left, transparent 50%, rgb(0, 255, 81) 50%);
+}
+
+
+.song-entry:hover {
+  background-position: left bottom;
+  color: white; /* Text color change on hover */
+}
+
+.ignore-transition {
+  transition: none !important;
+}
+
+.song-entry-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 10px;
+}
+
+/* Child div next to each other */
+.song-entry-container {
+  display: flex;
+  flex-direction: row;
+  justify-content:center;
+  align-items: center;
+  width: 100%;
+}
+
+.decade-legend{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between; 
+  /* Space evenly */
+  
+}
+
+.decade-legend div {
+  /* border-color: aqua; */
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 10px; /* Adjust the value as needed for your desired border radius */;
+  padding: 0 5px;
+}
+
+
+.d80s {
+  background-image: linear-gradient(to right, transparent 50%, rgb(255, 0, 183) 50%);
+}
+
+.d90s {
+  background-image: linear-gradient(to right, transparent 50%, rgb(0, 153, 241) 50%);
+}
+
+.d2000s {
+  background-image: linear-gradient(to right, transparent 50%, rgb(116, 127, 150) 50%);
+}
+
+.d2010s {
+  background-image: linear-gradient(to right, transparent 50%, rgb(255, 13, 0) 50%);
+}
+
+.d2020s {
+  background-image: linear-gradient(to right, transparent 50%, rgb(0, 255, 81) 50%);
+}
+
+
+/* Main Page */
+.button-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px; /* Optional padding */
+  background-color: #f0f0f0; /* Optional background color */
+  z-index: 10;
+}
+
+.button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+@media (max-width: 600px) { /* Adjust breakpoint as needed */
+  .button-container {
+    flex-direction: column;
+    padding: 0; /* Optional: reset padding for mobile */
+  }
+
+  .button {
+    width: 100%; /* Make buttons full width on mobile */
+    margin-bottom: 10px; /* Adjust margin as needed */
+  }
+}
+
+.intro-container {
+display: flex;
+flex-direction: column;
+justify-content: flex-start;
+align-items: flex-start;
+
+}
+
+.intro-container div {
+  color: white;
 }
