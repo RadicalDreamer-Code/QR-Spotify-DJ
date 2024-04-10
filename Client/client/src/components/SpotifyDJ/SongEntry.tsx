@@ -11,6 +11,7 @@ import React from "react";
 import { SpotifySong } from "../../interfaces";
 import { addSong, removeSong } from "../../api/QRDJ";
 import './index.css';
+import { Fade, Slide } from "react-awesome-reveal";
 
 const selectClassNameBasedOnYear = (releaseDate: string) => {
   const year = parseInt(releaseDate.split("-")[0]);
@@ -57,7 +58,7 @@ const EntryWithDiagonalImage = (
 
 export const SongEntry = (props: SongEntryProps) => {
   const hashUser = localStorage.getItem("validHash");
-  const MAX_LENGTH = 20;
+  const MAX_LENGTH = 25;
   const shortenedText = props.song.name.length > MAX_LENGTH ? `${props.song.name.slice(0, MAX_LENGTH)}...` : props.song.name;
 
   const handleSong = async (song: SpotifySong) => {
@@ -90,8 +91,10 @@ export const SongEntry = (props: SongEntryProps) => {
   };
 
   return (
-    <div className="song-entry-container">
+    <Slide triggerOnce>
+
     
+    <div className="song-entry-container">
     <div className="song-entry">
       <div className="image-display">
         <img src={props.song.album.images[0].url} alt="Your Image" width={50} height={"50%"} />
@@ -119,21 +122,27 @@ export const SongEntry = (props: SongEntryProps) => {
               Play
             </Button>
             <Button
-              onClick={() => addSong(props.song)}
+              onClick={() => handleSong(props.song)}
               variant="contained"
               color="primary"
             >
-              Add
+              {!props.selected ? "Add" : "Remove"}
             </Button>
+            <Button
+              onClick={() => handleSong(props.song)}
+              variant="contained"
+              color="primary"
+            >:</Button>
             </div>
         </div>
 
         </div>
     </div>
-    <div className={"song-entry-half-background " + selectClassNameBasedOnYear(props.song.release_date)}>
+    <div className={"song-entry-half-background " + (!props.selected ? selectClassNameBasedOnYear(props.song.release_date): "song-entry-selected")}>
       
     </div>
     </ div>
+    </Slide>
   )
 
   // return (

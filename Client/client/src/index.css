@@ -36,17 +36,18 @@ code {
   object-fit: cover;
 }
 
+/*
 .song-entry-selected {
-  /* transparent background */
   background-color: rgba(0, 0, 0, 0.3); 
   height: 100%;
   width: 100%;
   position: absolute;
-  display: flex; /* Add flexbox to center content */
-  justify-content: center; /* Center horizontally */
-  align-items: center; /* Center vertically */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
+*/
 
 .fade-80s {
   height: 100%;
@@ -113,6 +114,31 @@ code {
   transition: background-position 0.5s, color 0.5s;
   cursor: pointer;
 } */
+.spotify-container {
+  display: flex !important;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+
+}
+
+.spotify-sidebar {
+  display: flex;
+  flex-direction: column;
+  color: white;
+  border-left-style: solid  #ffffff 1px;
+  padding: 20px;
+  width: 300px;
+}
+
+.spotify-sidebar .sidebar-title {
+  font-family: 'Geminis';
+  font-size: 40px;
+  color: white;
+  margin: 0;
+  padding-left: 20px;
+
+}
 
 .spotify-dj-footer {
   display: flex;
@@ -178,6 +204,7 @@ code {
 
 .song-list {
   position: relative;
+  max-width: 100% !important;
 }
 .song-list-container {
   position: relative;
@@ -204,13 +231,20 @@ code {
   width: 100%;
   height: 40%;
   z-index: -1;
-  background: linear-gradient(to right, #42b1dd, #ff00ea);
+  background-size: 200% 100%;
+  transition: background-position 0.5s ease;
+  
   left: 0;
   margin: 4px 0;
 
   border-width: 1px;
   border-style: solid;
   border-color: #ffffff;
+}
+
+.song-entry-selected {
+  background: linear-gradient(to right, #42b1dd, #ff00ea);
+  background-position: 100%;
 }
 
 
@@ -370,6 +404,24 @@ code {
 
 .d2020s {
   background-image: linear-gradient(to right, transparent 50%, rgb(0, 255, 81) 50%);
+}
+
+.spotify-summary-sticky-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #050404;
+  color: #fff;
+  padding: 10px;
+  text-align: center;
+  border-width: 1px;
+  border-color: #ffffff;
+  /* only top border */
+  border-top-style: solid;
+
+  font-family: "Geminis";
+  font-size: 20px;
 }
 
 

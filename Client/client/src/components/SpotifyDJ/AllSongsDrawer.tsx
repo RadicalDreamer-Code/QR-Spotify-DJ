@@ -59,6 +59,7 @@ export const AllSongsDrawer = (props: TemporaryDrawerProps) => {
   // Drawer list not close
   const DrawerList = (
     <>
+      <p className="sidebar-title">////// SELECTED</p>
       <Accordion>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
@@ -106,10 +107,12 @@ export const AllSongsDrawer = (props: TemporaryDrawerProps) => {
 
   return (
     <Drawer
+      className="selection-drawer"
       //   variant="persistent"
       anchor={"left"}
       open={props.open}
       onClose={() => props.toggleDrawer(false)}
+      color="primary"
     >
       <DrawerHeader>
         <IconButton onClick={() => props.toggleDrawer(false)}>

@@ -137,29 +137,30 @@ export default function SpotifyDJ({ validHash }: SpotifyDJProps) {
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Container component="main" maxWidth="sm">
-        <CssBaseline />
-        <div className="spotify-dj-header">
-          <img src="./spotify/header_complete@2x-8.png"></img>
-        </div>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            width: "100%",
-          }}
-        >
-          {/* <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+      <Container component="main" maxWidth="md" className="spotify-container">
+        <div>
+          <CssBaseline />
+          <div className="spotify-dj-header">
+            <img src="./header_complete@2x-8.png"></img>
+          </div>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              width: "100%",
+            }}
+          >
+            {/* <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
             <LockOutlinedIcon />
           </Avatar> */}
-          <Box
-            className="search-bar"
-            component="form"
-            onSubmit={handleSubmit}
-            noValidate
-            sx={{ mt: 1 }}
-          >
+            <Box
+              className="search-bar"
+              component="form"
+              onSubmit={handleSubmit}
+              noValidate
+              sx={{ mt: 1 }}
+            >
               <input
                 className="search-song-input"
                 type="text"
@@ -170,43 +171,46 @@ export default function SpotifyDJ({ validHash }: SpotifyDJProps) {
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
               /> */}
-              <button
-                className="search-button"
-              >
-                Search
-              </button>
+              <button className="search-button">Search</button>
               {/* 
               <DecadeLegend />
               <Button onClick={() => toggleDrawer(true)} fullWidth>
                 All Songs <ExpandMoreIcon />
               </Button>
               
-              */
-            }
+              */}
+            </Box>
           </Box>
-        </Box>
-        <div className="song-list-container">
-          <List
-            className="song-list"
-            sx={{ width: "100%", maxWidth: 580 }}
-          >
-            {songs?.map((song) => (
-              <SongEntry
-                key={song.uri}
-                song={song}
-                selected={checkIfSelected(song)}
-                handleSelect={handleSelect}
-                handleRemove={handleRemove}
-              />
-            ))}
-          </List>
-          <img className="song-list-img" src="./spotify/results_horizontal@2x-8.png"></img>
-        </div>
-        <div className="spotify-dj-footer">
+          <div className="song-list-container">
+            <List className="song-list" sx={{ width: "100%", maxWidth: 580 }}>
+              {songs?.map((song) => (
+                <SongEntry
+                  key={song.uri}
+                  song={song}
+                  selected={checkIfSelected(song)}
+                  handleSelect={handleSelect}
+                  handleRemove={handleRemove}
+                />
+              ))}
+            </List>
+            <img
+              className="song-list-img"
+              src="./results_horizontal@2x-8.png"
+            ></img>
+          </div>
+          <div className="spotify-dj-footer">
             <div>
-              <img src="./spotify/swirlheader@2x-8.png"></img>
+              <img src="./swirlheader@2x-8.png"></img>
             </div>
             <p>Design BY FAB</p>
+          </div>
+          <div className="spotify-summary-sticky-footer">
+            <p>Selected Songs: {selectedSongs.length} / 25</p>
+            <button
+              className="spotify-summary-button"
+              onClick={() => toggleDrawer(true)}
+            > Open all selected Songs</button>
+          </div>
         </div>
       </Container>
       <Snackbar
