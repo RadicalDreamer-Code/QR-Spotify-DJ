@@ -17,8 +17,8 @@ interface CheckHashKeyResponse {
   username: string;
 }
 
-export const setUsername = async (hash: string, username: string): Promise<CheckHashKeyResponse> => {
-  const res = await axios.post(`${API_URL}/set-username/`, { hash, username });
+export const setUsername = async (hash: string, username: string, birthyear: string): Promise<CheckHashKeyResponse> => {
+  const res = await axios.post(`${API_URL}/set-username/`, { hash, username, birthyear });
   return res.data;
 }
 

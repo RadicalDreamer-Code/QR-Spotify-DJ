@@ -23,14 +23,16 @@ export const searchSong = async (query: string): Promise<SpotifySong[]> => {
   }
 }
 
-export const addSong = async (song: SpotifySong): Promise<boolean> => {
+export const addSong = async (song: SpotifySong, trash: boolean = false, chill: boolean = false): Promise<boolean> => {
   try {
     const data = {
       songName: song.name,
       uri: song.uri,
       hashUser: song.user,
       durationMs: song.duration_ms,
-      releaseDate: song.release_date
+      releaseDate: song.release_date,
+      trash: trash,
+      chill: chill,
     }
     const res = await axios.post(`${API_URL}/add_track/`, data);
     return true;
@@ -74,6 +76,7 @@ export const getSelectedSongsFromUser = async (hashUser: string): Promise<Spotif
     }
     console.log(data)
     const res = await axios.post(`${API_URL}/get_selected_tracks/`, data);
+    console.log(res)
     return res.data;
   } catch (error) {
     console.log(error);

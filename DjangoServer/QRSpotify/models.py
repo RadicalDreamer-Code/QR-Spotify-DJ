@@ -1,5 +1,6 @@
 from django.db import models
 from accounts.models import HashUser
+from django.utils.timezone import now
 
 # Create your models here.
 
@@ -15,6 +16,7 @@ class Track(models.Model):
     name = models.CharField(max_length=200)
     uri = models.CharField(max_length=200)
     added_by_hash_user = models.ForeignKey(HashUser, on_delete=models.CASCADE)
+    added_at = models.DateTimeField(default=now)
     duration_ms = models.IntegerField(default=-1)
     release_date = models.CharField(max_length=200, default="")
     trash = models.BooleanField(default=False)

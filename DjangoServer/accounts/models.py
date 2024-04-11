@@ -23,11 +23,13 @@ class UserData(models.Model):
 class HashUser(models.Model):
     # user = models.ForeignKey(User, on_delete=models.CASCADE)
     username = models.TextField(default="", blank=True)
+    birth_year = models.TextField(default="", blank=True)
     hash = models.TextField(default="", blank=True)
     created_at = models.DateTimeField(default=now)
     
     def __str__(self) -> str:
-        return self.username + self.hash
+        username = self.username if self.username else "Anonymous"
+        return username + " - " + self.hash
     
     @classmethod
     def create(cls, username, hash):

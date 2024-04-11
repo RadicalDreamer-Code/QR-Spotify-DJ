@@ -42,4 +42,6 @@ export interface SpotifySong {
     release_date: string,
     duration_ms: number
     type: string,
+    trash?: boolean,
+    chill?: boolean,
 }

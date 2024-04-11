@@ -20,7 +20,7 @@ from django.conf import settings
 from accounts.models import HashUser
 from .models import Track
 
-MAX_SONG_COUNT = 25
+MAX_SONG_COUNT = 40
 
 # predefined genres / key from json
 GENRE_ROCK = "Rock"
@@ -191,6 +191,7 @@ class GetSelectedTracks(APIView):
 
         # get tracks
         tracks = Track.objects.filter(added_by_hash_user=user).values()
+        print(tracks)
 
         return Response(tracks)
 
@@ -224,6 +225,17 @@ class AddTrackToPlaylistAutomated(APIView):
             }
             return Response(response)
         
+        # only allow tracks with less than duration of 6 minutes^
+        print(data.get("durationMs"))
+        if data.get("durationMs") > 360000:
+            response = {
+                "status": "error",
+                "message": "track can't be longer than 6 minutes"   
+            }
+            return Response(response, status=400)
+        
+
+        
         # check how many tracks user has already added
         tracks = Track.objects.filter(added_by_hash_user=user)
         if len(tracks) >= MAX_SONG_COUNT:
@@ -239,6 +251,8 @@ class AddTrackToPlaylistAutomated(APIView):
             added_by_hash_user=user
         )
 
+        print(track)
+
         if track:
             response = {
                 "status": "error",
@@ -253,7 +267,9 @@ class AddTrackToPlaylistAutomated(APIView):
             uri=data.get("uri"),
             duration_ms=data.get("durationMs"),
             release_date=data.get("releaseDate"),
-            added_by_hash_user=user
+            added_by_hash_user=user,
+            trash = data.get("trash"),
+            chill = data.get("chill")
         )
 
         response = {

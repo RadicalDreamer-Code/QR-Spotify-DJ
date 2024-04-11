@@ -242,9 +242,25 @@ code {
   border-color: #ffffff;
 }
 
+
+
 .song-entry-selected {
   background: linear-gradient(to right, #42b1dd, #ff00ea);
   background-position: 100%;
+  background-size: 200% 100%;
+  animation: animateGradient 5s linear infinite; 
+}
+
+@keyframes animateGradient {
+  0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
 }
 
 
@@ -407,6 +423,7 @@ code {
 }
 
 .spotify-summary-sticky-footer {
+  height: 100px;
   position: fixed;
   bottom: 0;
   left: 0;
@@ -423,6 +440,43 @@ code {
   font-family: "Geminis";
   font-size: 20px;
 }
+
+.spotify-summary-sticky-footer button {
+  /* Remove standard button style */
+  background: none;
+  border-style: solid;
+  margin-top: 10px;
+  padding: 10px;
+  outline-offset: 10px;
+  color: #fff;
+  cursor: pointer;
+  font-family: "Geminis";
+  font-size: 20px;
+}
+
+.spotify-summary-sticky-footer button:hover {
+  background-color: #ffffff;
+  color: #000;
+}
+
+.sign-in input {
+  background: none;
+  border-style: solid;
+  margin-top: 10px;
+  padding: 10px;
+  outline-offset: 10px;
+  color: #fff;
+  cursor: pointer;
+  font-family: "Geminis";
+  font-size: 20px;
+}
+
+.sign-in input:hover {
+  background-color: #ffffff;
+  color: #000;
+}
+
+
 
 
 /* Main Page */
@@ -470,4 +524,57 @@ align-items: flex-start;
 
 .intro-container div {
   color: white;
+}
+
+
+/* */
+.selection-drawer {
+  background-color: #000;
+}
+.selection-drawer-title {
+  color: white;
+  background-color: #000;
+  margin: 0;
+
+  font-family: "Geminis";
+  font-size: 40px;
+
+}
+
+.MuiDrawer-paperAnchorBottom div:first-child {
+  background-color: #000;
+}
+
+.MuiDrawer-paperAnchorBottom div:first-child div {
+  background-color: #000;
+}
+.selection-drawer-accordion-title {
+  color: white !important;
+  background-color: #000;
+  font-family: "Geminis";
+  font-size: 20px;
+}
+
+
+.MuiListItemText-root {
+  margin: 0;
+}
+
+.MuiListItemText-root span{
+  color: white;
+  background-color: #000;
+  font-family: "Geminis";
+  font-size: 20px;
+}
+
+.optionDialog :first-child div{
+  background-color: black;
+}
+
+.optionDialog-button {
+  background-color: white;
+  /* color: #ffffff; */
+  border: none;
+  border-radius: 5px;
+  cursor:pointer;
 }

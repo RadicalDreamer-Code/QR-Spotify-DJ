@@ -31,6 +31,7 @@ import { Navigate } from "react-router-dom";
 import { useEffect } from "react";
 import { AllSongsDrawer } from "../components/SpotifyDJ/AllSongsDrawer";
 import { DecadeLegend } from "../components/SpotifyDJ/DecadeLegend";
+import {SongAddOption} from "../components/SpotifyDJ/SongAddOption";
 
 function Copyright(props: any) {
   return (
@@ -53,7 +54,8 @@ interface SpotifyDJProps {
 }
 
 export default function SpotifyDJ({ validHash }: SpotifyDJProps) {
-  console.log(validHash);
+  const MAX_SONGS = 40;
+
   const [songs, setSongs] = React.useState<SpotifySong[]>([]);
   const [selectedSongs, setSelectedSongs] = React.useState<SpotifySong[]>([]);
 
@@ -63,6 +65,19 @@ export default function SpotifyDJ({ validHash }: SpotifyDJProps) {
 
   // all songs drawer
   const [drawerOpen, setDrawerOpen] = React.useState(false);
+
+  // modal
+  const [modalOpen, setModalOpen] = React.useState(false);
+  
+  // const handleClickOpen = () => {
+  //   setOpen(true);
+  // };
+
+  // const handleClose = (value: string) => {
+  //   setOpen(false);
+  //   setSelectedValue(value);
+  // };
+
 
   useEffect(() => {
     // get all selected songs
@@ -103,11 +118,26 @@ export default function SpotifyDJ({ validHash }: SpotifyDJProps) {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+    const songName = data.get("song") as string;
+
+    if (!songName) {
+      return;
+    }
+  
+    if (songName.length > 60) {
+      setMessage("Please enter a shorter song name");
+      setOpen(true);
+      return;
+    }
 
     // call api
     try {
-      const requestedSongs = await searchSong(data.get("song") as string);
+      const requestedSongs = await searchSong(songName);
       setSongs(requestedSongs);
+      // scroll to song-list-container
+      const element = document.querySelector(".song-list-container");
+      element?.scrollIntoView({ behavior: "smooth" });
+      
     } catch (error) {
       console.log(error);
     }
@@ -117,8 +147,8 @@ export default function SpotifyDJ({ validHash }: SpotifyDJProps) {
     return selectedSongs.some((selectedSong) => selectedSong.uri === song.uri);
   };
 
-  const handleSelect = (song: SpotifySong, message: string) => {
-    if (selectedSongs.length < 25) {
+  const handleSelect = (song: SpotifySong, message: string, success: boolean) => {
+    if (success && selectedSongs.length < MAX_SONGS) {
       setSelectedSongs([...selectedSongs, song]);
     }
 
@@ -205,11 +235,9 @@ export default function SpotifyDJ({ validHash }: SpotifyDJProps) {
             <p>Design BY FAB</p>
           </div>
           <div className="spotify-summary-sticky-footer">
-            <p>Selected Songs: {selectedSongs.length} / 25</p>
             <button
-              className="spotify-summary-button"
               onClick={() => toggleDrawer(true)}
-            > Open all selected Songs</button>
+            >Selected Songs: {selectedSongs.length} / {MAX_SONGS}</button>
           </div>
         </div>
       </Container>

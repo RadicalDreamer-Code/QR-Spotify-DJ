@@ -217,10 +217,12 @@ class SetUsernameForHashAPI(generics.GenericAPIView):
 
     def post(self, request):
         username = request.data.get("username")
+        birth_year = request.data.get("birthyear")
         hash = request.data.get("hash")
         try:
             hash_user = HashUser.objects.get(hash=hash)
             hash_user.username = username
+            hash_user.birth_year = birth_year
             hash_user.save()
             return Response({
                 "username": hash_user.username,
