@@ -5,8 +5,6 @@ import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 from pprint import pprint
 from time import sleep
-from flask import Flask
-from flask_limiter import Limiter
 from dotenv import load_dotenv
 
 from rest_framework import viewsets
@@ -59,7 +57,7 @@ sp_oath = SpotifyOAuth(
     client_id=settings.SPOTIPY_CLIENT_ID,
     client_secret=settings.SPOTIPY_CLIENT_SECRET,
     redirect_uri=settings.SPOTIPY_REDIRECT_URI,
-    scope=scope
+    scope=scope,
 )
 sp = spotipy.Spotify(
     client_credentials_manager=sp_oath
@@ -160,6 +158,23 @@ def add_track_to_playlist_automated_test():
                 genre_counter[selected_genre] = genre_counter.get(selected_genre, 0) + 1
 
     return genre_counter
+
+class GetAllTracks(APIView):
+    """
+    View to get all tracks.
+
+    * Requires token authentication.
+    * Only admin users are able to access this view.
+    """
+    authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [permissions.IsAdminUser]
+
+    def get(self, request, format=None):
+        """
+        Get all tracks.
+        """
+        tracks = Track.objects.all().values()
+        return Response(tracks)
 
 class GetSelectedTracks(APIView):
     """

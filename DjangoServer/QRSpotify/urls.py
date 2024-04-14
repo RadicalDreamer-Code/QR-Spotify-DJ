@@ -13,4 +13,5 @@ urlpatterns = [
     path('search_track/<track_name>', views.SearchTrack.as_view()),
     path('get_duration_for_each_decade/', views.GetDurationForEachDecade.as_view()),
     path('get_selected_tracks/', views.GetSelectedTracks.as_view()),
+    path('get_all_tracks', views.GetAllTracks.as_view()),
 ]
