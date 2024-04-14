@@ -42,6 +42,16 @@ export const addSong = async (song: SpotifySong, trash: boolean = false, chill: 
   }
 }
 
+export const getStats = async () => {
+  try {
+    const res = await axios.post(`${API_URL}/get_stats/`)
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    return []
+  }
+}
+
 export const removeSong = async (song: SpotifySong): Promise<boolean> => {
   try {
     const data = {

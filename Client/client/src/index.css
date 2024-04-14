@@ -20,6 +20,12 @@ code {
     monospace;
 }
 
+.piechart {
+  height: 500px;
+  width: 500px;
+  border-radius: 50%;
+}
+
 .frame {
   height: 100%;
   width: 100px;

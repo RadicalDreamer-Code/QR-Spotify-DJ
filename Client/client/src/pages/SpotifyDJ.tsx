@@ -24,7 +24,7 @@ import {
   Snackbar,
 } from "@mui/material";
 import { Timeline } from "../components/SpotifyDJ/Timeline";
-import { getSelectedSongsFromUser, removeSong, searchSong } from "../api/QRDJ";
+import { getStats, getSelectedSongsFromUser, removeSong, searchSong } from "../api/QRDJ";
 import { SpotifySong } from "../interfaces";
 import { SongEntry } from "../components/SpotifyDJ/SongEntry";
 import { Navigate } from "react-router-dom";
@@ -58,6 +58,7 @@ export default function SpotifyDJ({ validHash }: SpotifyDJProps) {
 
   const [songs, setSongs] = React.useState<SpotifySong[]>([]);
   const [selectedSongs, setSelectedSongs] = React.useState<SpotifySong[]>([]);
+  const [piechartStyle, setPiechartStyle] = React.useState<String>("");
 
   // snackbar
   const [open, setOpen] = React.useState(false);
@@ -88,6 +89,39 @@ export default function SpotifyDJ({ validHash }: SpotifyDJProps) {
     };
 
     getSelectedSongs();
+
+    const getCurrentStats = async () => {
+      const stats: Map<String, number>=await getStats();
+      console.log(stats);
+      // const colors = ['pink', 
+      //                 'orange',
+      //                 'blue',
+      //                 'black',
+      //                 'white',
+      //                 'yellow',
+      //                 'green',
+      //                 'brown',
+      //                 'gray'
+      //               ];
+
+      // const bgImg =  "conic-gradient(";
+
+      // const pieChartData = new Map<String, {value: number, decade: String }>();
+      // stats.forEach((val, key ) => {
+      //   const color = colors.pop();
+      //   if(!!color) {
+      //     bgImg.concat(color + " "  + val * 100 )
+      //     pieChartData.set(color, {value:val, decade: key});
+      //   }
+      // })
+
+      // const piechartStyle = {
+      //   backgroundImage:bgImg, 
+      // };
+      // setPiechartStyle(piechartStyle);
+      };
+    
+      getCurrentStats();
   }, []);
 
   if (!validHash) {
@@ -240,6 +274,9 @@ export default function SpotifyDJ({ validHash }: SpotifyDJProps) {
             >Selected Songs: {selectedSongs.length} / {MAX_SONGS}</button>
           </div>
         </div>
+      </Container>
+      <Container>
+        <div className="piechart" styles={{piechartStyle}}></div>
       </Container>
       <Snackbar
         open={open}

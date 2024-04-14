@@ -8,6 +8,7 @@ from time import sleep
 from flask import Flask
 from flask_limiter import Limiter
 from dotenv import load_dotenv
+from collections import defaultdict
 
 from rest_framework import viewsets
 from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView, UpdateAPIView, DestroyAPIView
@@ -194,6 +195,53 @@ class GetSelectedTracks(APIView):
         print(tracks)
 
         return Response(tracks)
+
+class GetStats(APIView): 
+
+    """
+    View to get the selected tracks.
+
+    * Requires token authentication.
+    * Only admin users are able to access this view.
+    """
+    authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = []
+
+    def get(self, request, format=None):
+        """
+        Get the stats
+        """
+
+        data = request.data
+        hashuser = data.get("hashUser")
+
+        # check if hashuser exists in db
+        try:
+            user = HashUser.objects.get(hash=hashuser)
+        except HashUser.DoesNotExist:
+            response = {
+                "status": "error",
+                "message": "hashuser not found"
+            }
+            return Response(response)
+
+        d = defaultdict(list)
+
+        for track in Track.objects: 
+            year = track.release_date[:4]  
+            if year.startswith(2): 
+                key = year[:3] + "0s"
+            else: 
+                key = year[3] + "0s"
+            if key in d: 
+                d[key]= d[key] + 1 
+            else: 
+                d[key]= 0
+        keys = list(d.keys())
+        for key in keys:
+            d[key] =  d[key]/len(keys)
+
+        return Response(json.dumps(d))
 
 
 class AddTrackToPlaylistAutomated(APIView):
